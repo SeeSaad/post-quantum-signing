@@ -194,7 +194,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    printf("Signature OK");
+    printf("Signature OK\n");
     cleanup_heap(public_key, message, signature, sig);
     OQS_destroy();
     return EXIT_SUCCESS;
