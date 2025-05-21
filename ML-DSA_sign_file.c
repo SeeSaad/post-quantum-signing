@@ -67,6 +67,36 @@ int read_file_to_buffer(const char *filename, uint8_t *buffer, size_t buffer_len
     return EXIT_SUCCESS;
 }
 
+int write_to_file(const char *filename, const uint8_t *signature, size_t sig_len) {
+    size_t output_filename_len = strlen(filename) + 5; // ".sig" + null terminator
+    char *output_filename = malloc(output_filename_len);
+    if (output_filename == NULL) {
+        perror("malloc");
+        return EXIT_FAILURE;
+    }
+
+    snprintf(output_filename, output_filename_len, "%s.sig", filename);
+
+    FILE *fp = fopen(output_filename, "wb");
+    if (fp == NULL) {
+        perror("fopen");
+        free(output_filename);
+        return EXIT_FAILURE;
+    }
+
+    size_t written = fwrite(signature, 1, sig_len, fp);
+    if (written != sig_len) {
+        perror("fwrite");
+        fclose(fp);
+        free(output_filename);
+        return EXIT_FAILURE;
+    }
+
+    fclose(fp);
+    free(output_filename);
+    return EXIT_SUCCESS;
+}
+
 static OQS_STATUS allocate_memory(OQS_SIG **sig, uint8_t **public_key, uint8_t **secret_key, uint8_t **message, uint8_t **signature, size_t message_len) {
     
     *sig = OQS_SIG_new(OQS_SIG_alg_ml_dsa_65);
@@ -159,20 +189,22 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (write_to_file(sdfsdfsd, secret_key, OQS_SIG_ml_dsa_65_length_secret_key) != EXIT_SUCCESS) {
-        fprintf(stderr, "ERROR: Failed to write secret key to file!\n");
-        cleanup_stack(secret_key, OQS_SIG_ml_dsa_65_length_secret_key);
-        return -1;
+    if (write_to_file(filename, signature, sig->length_signature) != EXIT_SUCCESS) {
+        fprintf(stderr, "ERROR: Failed to write signature to file\n");
+        cleanup_heap(public_key, secret_key, message, signature, sig);
+		OQS_destroy();
+        return EXIT_FAILURE;
     }
 
-    printf("Signature (hex):\n");
-    for (size_t i = 0; i < signature_len; i++) {
-        printf("%02x", signature[i]);
-    }
-    printf("\n");
+    // printf("Signature (hex):\n");
+    // for (size_t i = 0; i < signature_len; i++) {
+    //     printf("%02x", signature[i]);
+    // }
+    // printf("\n");
 
     cleanup_heap(public_key, secret_key, message, signature, sig);
     OQS_destroy();
+
     return EXIT_SUCCESS;
     
 }
