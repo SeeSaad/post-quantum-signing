@@ -10,9 +10,7 @@
 // #define SIG_FILE_NAME ".sig"
 
 /* Cleaning up memory etc */
-void cleanup_heap(uint8_t *public_key, uint8_t *secret_key,
-                  uint8_t *message, uint8_t *signature,
-                  OQS_SIG *sig);
+void cleanup_heap(uint8_t *public_key, uint8_t *message, uint8_t *signature, OQS_SIG *sig);
 
 int get_file_size(const char *filename, size_t *file_size) {
     FILE *fp = fopen(filename, "rb");
@@ -107,7 +105,7 @@ static OQS_STATUS allocate_memory(OQS_SIG **sig, uint8_t **public_key, uint8_t *
 	*public_key = OQS_MEM_malloc((*sig)->length_public_key);
 	*signature = OQS_MEM_malloc((*sig)->length_signature);
 	*message = OQS_MEM_malloc(message_len);
-	if ((*public_key == NULL) || (*secret_key == NULL) || (*message == NULL) || (*signature == NULL)) {
+	if ((*public_key == NULL) || (*message == NULL) || (*signature == NULL)) {
 		fprintf(stderr, "ERROR: OQS_MEM_malloc failed!\n");
 		return OQS_ERROR;
 	}
