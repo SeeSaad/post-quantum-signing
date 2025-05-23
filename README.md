@@ -19,7 +19,9 @@ gcc -Ibuild/include -Lbuild/lib code_using_liboqs.c -o code -loqs -lcrypto
 
 
 ===========================================
+
 Steps executed on a Ubuntu instance in AWS:
+
 ===========================================
 
 Update and install dependencies:
@@ -70,9 +72,26 @@ hyperfine --runs 30 "./verify public_key.bin test.txt test.txt.sig"
 ```
 
 Benchmarking other signature algorithms:
+RSA (2048b):
 ```
 hyperfine --runs 30 "openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048"
 hyperfine --runs 30 "openssl rsa -pubout -in private.pem -out public.pem"
+hyperfine --runs 30 "openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt"
+hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt"
+```
+
+ECDSA (ECC P-256):
+```
+hyperfine --runs 30 "openssl ecparam -name prime256v1 -genkey -noout -out private.pem"
+hyperfine --runs 30 "openssl ec -in private.pem -pubout -out public.pem"
+hyperfine --runs 30 "openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt"
+hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt"
+```
+
+EdDSA (Ed25519):
+```
+hyperfine --runs 30 "openssl genpkey -algorithm ED25519 -out private.pem"
+hyperfine --runs 30 "openssl pkey -in ed25519_private.pem -pubout -out public.pem"
 hyperfine --runs 30 "openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt"
 hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt"
 ```
