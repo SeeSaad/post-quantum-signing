@@ -1,0 +1,92 @@
+2vCPU
+8GB RAM
+
+RSA (2048):
+
+Private-key:
+Benchmark 1: openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:2048
+  Time (mean ± σ):     329.4 ms ± 161.2 ms    [User: 326.7 ms, System: 2.5 ms]
+  Range (min … max):   157.3 ms … 635.4 ms    30 runs
+
+Public-key:
+Benchmark 1: openssl rsa -pubout -in private.pem -out public.pem
+  Time (mean ± σ):       4.8 ms ±   0.5 ms    [User: 3.3 ms, System: 1.3 ms]
+  Range (min … max):     4.1 ms …   6.1 ms    30 runs
+
+Sign:
+Benchmark 1: openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt
+  Time (mean ± σ):       6.5 ms ±   0.7 ms    [User: 4.6 ms, System: 1.8 ms]
+  Range (min … max):     5.0 ms …   7.9 ms    30 runs
+
+Verify:
+Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt
+  Time (mean ± σ):       4.3 ms ±   0.7 ms    [User: 2.7 ms, System: 1.4 ms]
+  Range (min … max):     3.4 ms …   6.7 ms    30 runs
+
+===========================================================================================
+
+RSA (3072):
+
+Private-key
+Benchmark 1: openssl genpkey -algorithm RSA -out private.pem -pkeyopt rsa_keygen_bits:3072
+  Time (mean ± σ):     982.4 ms ± 454.2 ms    [User: 979.1 ms, System: 2.9 ms]
+  Range (min … max):   353.0 ms … 2074.1 ms    30 runs
+ 
+Public-key
+Benchmark 1: openssl rsa -pubout -in private.pem -out public.pem
+  Time (mean ± σ):       4.6 ms ±   0.6 ms    [User: 3.3 ms, System: 1.3 ms]
+  Range (min … max):     3.8 ms …   6.3 ms    30 runs
+  
+Sign:
+Benchmark 1: openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt
+  Time (mean ± σ):       9.8 ms ±   0.7 ms    [User: 8.1 ms, System: 1.5 ms]
+  Range (min … max):     8.4 ms …  11.2 ms    30 runs
+
+Verify:
+Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt
+  Time (mean ± σ):       4.1 ms ±   0.6 ms    [User: 3.0 ms, System: 0.9 ms]
+  Range (min … max):     3.4 ms …   6.0 ms    30 runs
+
+===========================================================================================
+
+ECDSA (P-256)
+
+Private-key:
+Benchmark 1: openssl ecparam -name prime256v1 -genkey -noout -out private.pem
+  Time (mean ± σ):       4.7 ms ±   0.6 ms    [User: 3.4 ms, System: 1.3 ms]
+  Range (min … max):     3.8 ms …   6.8 ms    30 runs
+
+Public-key:
+Benchmark 1: openssl ec -in private.pem -pubout -out public.pem
+  Time (mean ± σ):       4.1 ms ±   0.5 ms    [User: 2.7 ms, System: 1.4 ms]
+  Range (min … max):     3.0 ms …   5.5 ms    30 runs
+
+Sign:
+Benchmark 1: openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt
+  Time (mean ± σ):       4.6 ms ±   0.6 ms    [User: 3.4 ms, System: 1.3 ms]
+  Range (min … max):     3.4 ms …   6.2 ms    30 runs
+
+Verify:
+Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt
+  Time (mean ± σ):       4.3 ms ±   0.7 ms    [User: 3.0 ms, System: 1.1 ms]
+  Range (min … max):     3.3 ms …   6.3 ms    30 runs
+
+===========================================================================================
+
+ML-DSA-66
+Keypair:
+Low:  3.8ms
+Avg:  4.8ms
+High: 6.4ms
+
+Sign:
+Benchmark 1: ./sign secret_key.bin test.txt
+  Time (mean ± σ):       3.5 ms ±   0.5 ms    [User: 2.2 ms, System: 1.2 ms]
+  Range (min … max):     2.7 ms …   4.6 ms    30 runs
+
+Verify:
+Benchmark 1: ./verify public_key.bin test.txt test.txt.sig
+  Time (mean ± σ):       1.4 ms ±   1.0 ms    [User: 0.4 ms, System: 0.9 ms]
+  Range (min … max):     0.6 ms …   5.8 ms    30 runs
+
+===========================================================================================
