@@ -16,7 +16,11 @@ Example:
 gcc -Ibuild/include -Lbuild/lib code_using_liboqs.c -o code -loqs -lcrypto 
 ```
 
-# Steps executed on a Ubuntu vm in AWS:
+
+
+===========================================
+Steps executed on a Ubuntu instance in AWS:
+===========================================
 
 Update and install dependencies:
 ```
