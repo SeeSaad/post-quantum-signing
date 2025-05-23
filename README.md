@@ -91,7 +91,7 @@ hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt
 EdDSA (Ed25519):
 ```
 hyperfine --runs 30 "openssl genpkey -algorithm ED25519 -out private.pem"
-hyperfine --runs 30 "openssl pkey -in ed25519_private.pem -pubout -out public.pem"
+hyperfine --runs 30 "openssl pkey -in private.pem -pubout -out public.pem"
 hyperfine --runs 30 "openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt"
 hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt"
 ```
