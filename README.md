@@ -98,8 +98,9 @@ hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt
 
 EdDSA (Ed25519):
 ```
-hyperfine --runs 30 "openssl dsaparam -out dsa_2048.param 2048"
-hyperfine --runs 30 "openssl gendsa -out dsa_private.bin dsa_2048.param"
-hyperfine --runs 30 "openssl dgst -sha256 -sign dsa_private.bin -out test.txt.sig test.txt"
-hyperfine --runs 30 "openssl dgst -sha256 -verify dsa_public.bin -signature test.txt.sig test.txt"
+hyperfine --runs 30 "openssl dsaparam -out dsa.param 2048"
+hyperfine --runs 30 "openssl gendsa -out private.pem dsa.param"
+hyperfine --runs 30 "openssl dsa -in private.pem -pubout -out public.pem"
+hyperfine --runs 30 "openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt"
+hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt"
 ```
