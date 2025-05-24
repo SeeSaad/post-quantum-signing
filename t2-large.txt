@@ -73,7 +73,38 @@ Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig tes
 
 ===========================================================================================
 
+
+EdDSA (2048)
+
+Setup:
+Benchmark 1: openssl dsaparam -out dsa.param 2048
+  Time (mean ± σ):     534.0 ms ± 277.4 ms    [User: 531.9 ms, System: 2.0 ms]
+  Range (min … max):   239.0 ms … 1366.6 ms    30 runs
+
+Private-key:
+Benchmark 1: openssl gendsa -out private.pem dsa.param
+  Time (mean ± σ):       6.8 ms ±   0.9 ms    [User: 5.3 ms, System: 1.5 ms]
+  Range (min … max):     5.7 ms …   9.4 ms    30 runs
+
+Public-key:
+Benchmark 1: openssl dsa -in private.pem -pubout -out public.pem
+  Time (mean ± σ):       5.7 ms ±   0.8 ms    [User: 4.1 ms, System: 1.6 ms]
+  Range (min … max):     4.7 ms …   7.6 ms    30 runs
+
+Sign:
+Benchmark 1: openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt
+  Time (mean ± σ):       6.5 ms ±   0.6 ms    [User: 4.8 ms, System: 1.6 ms]
+  Range (min … max):     5.6 ms …   8.1 ms    30 runs
+
+Verify:
+Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt
+  Time (mean ± σ):       4.9 ms ±   0.8 ms    [User: 3.4 ms, System: 1.4 ms]
+  Range (min … max):     4.0 ms …   7.5 ms    30 runs
+
+===========================================================================================
+
 ML-DSA-66
+
 Keypair:
 Low:  3.8ms
 Avg:  4.8ms
