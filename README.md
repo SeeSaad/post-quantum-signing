@@ -114,17 +114,19 @@ To use the newest version:
 export PATH="$HOME/ssl/bin:$PATH"
 ```
 
+EdDSA (Ed25519):
 ```
 hyperfine --runs 30 "openssl genpkey -algorithm ED25519 -out private.pem"
-hyperfine --runs 30 "openssl pkey -in private.pem -pubout -out public.pem"
-hyperfine --runs 30 "openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig"
-hyperfine --runs 30 "openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt"
 ```
 
 ML-DSA (openssl 3.5.0):
-
 ```
+hyperfine --runs 30 "openssl genpkey -algorithm ML-DSA-44 -out private.pem"
+hyperfine --runs 30 "openssl genpkey -algorithm ML-DSA-65 -out private.pem"
 hyperfine --runs 30 "openssl genpkey -algorithm ML-DSA-87 -out private.pem"
+```
+```
+hyperfine --runs 30 "openssl genpkey -algorithm ML-DSA-XX -out private.pem"
 hyperfine --runs 30 "openssl pkey -in private.pem -pubout -out public.pem"
 hyperfine --runs 30 "openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig"
 hyperfine --runs 30 "openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt"
