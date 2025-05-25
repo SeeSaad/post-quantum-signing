@@ -73,28 +73,27 @@ Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig tes
 
 ===========================================================================================
 
-
-EdDSA (2048)
+EdDSA (ED25519)
 
 Private-key:
-Benchmark 1: openssl genpkey -algorithm ML-DSA-87 -out private.pem
-  Time (mean ± σ):       5.4 ms ±   0.5 ms    [User: 3.8 ms, System: 1.6 ms]
-  Range (min … max):     4.8 ms …   6.8 ms    30 runs
+Benchmark 1: openssl genpkey -algorithm ED25519 -out private.pem
+  Time (mean ± σ):       7.1 ms ±  12.5 ms    [User: 3.3 ms, System: 1.5 ms]
+  Range (min … max):     3.7 ms …  73.3 ms    30 runs
 
 Public-key:
-Benchmark 1: openssl dsa -in private.pem -pubout -out public.pem
-  Time (mean ± σ):       5.7 ms ±   0.8 ms    [User: 4.1 ms, System: 1.6 ms]
-  Range (min … max):     4.7 ms …   7.6 ms    30 runs
+Benchmark 1: openssl pkey -in private.pem -pubout -out public.pem
+  Time (mean ± σ):       4.9 ms ±   0.5 ms    [User: 3.2 ms, System: 1.4 ms]
+  Range (min … max):     3.8 ms …   5.8 ms    30 runs
 
 Sign:
-Benchmark 1: openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt
-  Time (mean ± σ):       6.5 ms ±   0.6 ms    [User: 4.8 ms, System: 1.6 ms]
-  Range (min … max):     5.6 ms …   8.1 ms    30 runs
+Benchmark 1: openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig
+  Time (mean ± σ):       4.3 ms ±   0.5 ms    [User: 2.8 ms, System: 1.4 ms]
+  Range (min … max):     3.5 ms …   5.9 ms    30 runs
 
 Verify:
-Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt
-  Time (mean ± σ):       4.9 ms ±   0.8 ms    [User: 3.4 ms, System: 1.4 ms]
-  Range (min … max):     4.0 ms …   7.5 ms    30 runs
+Benchmark 1: openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt
+  Time (mean ± σ):       4.3 ms ±   0.4 ms    [User: 3.2 ms, System: 1.0 ms]
+  Range (min … max):     3.6 ms …   5.1 ms    30 runs
 
 ===========================================================================================
 
