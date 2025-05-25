@@ -97,10 +97,35 @@ hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt
 ```
 
 EdDSA (Ed25519):
+EdDSA did not work with the current version of openssl in Ubuntu(3.0.x), In order to run the following commands, installing the newest (current) version of openssl is necessary.
+
 ```
-hyperfine --runs 30 "openssl dsaparam -out dsa.param 2048"
-hyperfine --runs 30 "openssl gendsa -out private.pem dsa.param"
-hyperfine --runs 30 "openssl dsa -in private.pem -pubout -out public.pem"
-hyperfine --runs 30 "openssl dgst -sha256 -sign private.pem -out test.txt.sig test.txt"
-hyperfine --runs 30 "openssl dgst -sha256 -verify public.pem -signature test.txt.sig test.txt"
+wget https://github.com/openssl/openssl/releases/download/openssl-3.5.0/openssl-3.5.0.tar.gz
+tar -xf openssl-*
+cd openssl-*
+
+./Configure --prefix=/home/ubuntu/ssl --openssldir=/home/ubuntu/ssl '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)'
+make -j$(nproc)
+make install
+```
+
+To use the newest version:
+```
+export PATH="$HOME/ssl/bin:$PATH"
+```
+
+```
+hyperfine --runs 30 "openssl genpkey -algorithm ED25519 -out private.pem"
+hyperfine --runs 30 "openssl pkey -in private.pem -pubout -out public.pem"
+hyperfine --runs 30 "openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig"
+hyperfine --runs 30 "openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt"
+```
+
+ML-DSA (openssl 3.5.0):
+
+```
+hyperfine --runs 30 "openssl genpkey -algorithm ML-DSA-87 -out private.pem"
+hyperfine --runs 30 "openssl pkey -in private.pem -pubout -out public.pem"
+hyperfine --runs 30 "openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig"
+hyperfine --runs 30 "openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt"
 ```
