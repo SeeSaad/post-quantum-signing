@@ -101,8 +101,8 @@ EdDSA did not work with the current version of openssl in Ubuntu(3.0.x), In orde
 
 ```
 wget https://github.com/openssl/openssl/releases/download/openssl-3.5.0/openssl-3.5.0.tar.gz
-tar -xf openssl-*
-cd openssl-*
+tar -xf openssl-3.5.0.tar.gz
+cd openssl-3.5.0
 
 ./Configure --prefix=/home/ubuntu/ssl --openssldir=/home/ubuntu/ssl '-Wl,--enable-new-dtags,-rpath,$(LIBRPATH)'
 make -j$(nproc)
