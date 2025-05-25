@@ -76,15 +76,10 @@ Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig tes
 
 EdDSA (2048)
 
-Setup:
-Benchmark 1: openssl dsaparam -out dsa.param 2048
-  Time (mean ± σ):     534.0 ms ± 277.4 ms    [User: 531.9 ms, System: 2.0 ms]
-  Range (min … max):   239.0 ms … 1366.6 ms    30 runs
-
 Private-key:
-Benchmark 1: openssl gendsa -out private.pem dsa.param
-  Time (mean ± σ):       6.8 ms ±   0.9 ms    [User: 5.3 ms, System: 1.5 ms]
-  Range (min … max):     5.7 ms …   9.4 ms    30 runs
+Benchmark 1: openssl genpkey -algorithm ML-DSA-87 -out private.pem
+  Time (mean ± σ):       5.4 ms ±   0.5 ms    [User: 3.8 ms, System: 1.6 ms]
+  Range (min … max):     4.8 ms …   6.8 ms    30 runs
 
 Public-key:
 Benchmark 1: openssl dsa -in private.pem -pubout -out public.pem
@@ -103,7 +98,80 @@ Benchmark 1: openssl dgst -sha256 -verify public.pem -signature test.txt.sig tes
 
 ===========================================================================================
 
-ML-DSA-66
+ML-DSA-44 (openssl 3.5.0)
+
+Private-key:
+Benchmark 1: openssl genpkey -algorithm ML-DSA-44 -out private.pem
+  Time (mean ± σ):       5.5 ms ±   0.6 ms    [User: 3.4 ms, System: 1.9 ms]
+  Range (min … max):     4.3 ms …   6.9 ms    30 runs
+
+Public-key:
+Benchmark 1: openssl pkey -in private.pem -pubout -out public.pem
+  Time (mean ± σ):       5.2 ms ±   0.5 ms    [User: 3.4 ms, System: 1.7 ms]
+  Range (min … max):     4.2 ms …   6.5 ms    30 runs
+
+Sign:
+Benchmark 1: openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig
+  Time (mean ± σ):       6.3 ms ±   0.8 ms    [User: 4.6 ms, System: 1.6 ms]
+  Range (min … max):     5.1 ms …   8.2 ms    30 runs
+
+Verify:
+Benchmark 1: openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt
+  Time (mean ± σ):       4.9 ms ±   0.7 ms    [User: 3.3 ms, System: 1.5 ms]
+  Range (min … max):     3.6 ms …   6.6 ms    30 runs
+
+===========================================================================================
+
+ML-DSA-65 (openssl 3.5.0)
+
+Private-key:
+Benchmark 1: openssl genpkey -algorithm ML-DSA-65 -out private.pem
+  Time (mean ± σ):       5.5 ms ±   0.7 ms    [User: 3.4 ms, System: 2.0 ms]
+  Range (min … max):     4.2 ms …   6.7 ms    30 runs
+
+Public-key:
+Benchmark 1: openssl pkey -in private.pem -pubout -out public.pem
+  Time (mean ± σ):       5.6 ms ±   0.5 ms    [User: 3.5 ms, System: 2.0 ms]
+  Range (min … max):     4.7 ms …   6.5 ms    30 runs
+
+Sign:
+Benchmark 1: openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig
+  Time (mean ± σ):       7.1 ms ±   1.5 ms    [User: 5.0 ms, System: 1.9 ms]
+  Range (min … max):     4.9 ms …  12.3 ms    30 runs
+
+Verify:
+Benchmark 1: openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt
+  Time (mean ± σ):       4.6 ms ±   0.5 ms    [User: 3.0 ms, System: 1.6 ms]
+  Range (min … max):     3.8 ms …   5.7 ms    30 runs
+
+===========================================================================================
+
+ML-DSA-87 (openssl 3.5.0)
+
+Private-key:
+Benchmark 1: openssl genpkey -algorithm ML-DSA-87 -out private.pem
+  Time (mean ± σ):       5.4 ms ±   0.5 ms    [User: 3.8 ms, System: 1.6 ms]
+  Range (min … max):     4.8 ms …   6.8 ms    30 runs
+
+Public-key:
+Benchmark 1: openssl pkey -in private.pem -pubout -out public.pem
+  Time (mean ± σ):       5.5 ms ±   0.6 ms    [User: 3.8 ms, System: 1.6 ms]
+  Range (min … max):     4.2 ms …   6.5 ms    30 runs
+
+Sign:
+Benchmark 1: openssl pkeyutl -sign -inkey private.pem -in test.txt -out test.txt.sig
+  Time (mean ± σ):       7.4 ms ±   1.0 ms    [User: 5.5 ms, System: 1.8 ms]
+  Range (min … max):     5.8 ms …   9.4 ms    30 runs
+
+Verify:
+Benchmark 1: openssl pkeyutl -verify -pubin -inkey public.pem -sigfile test.txt.sig -in test.txt
+  Time (mean ± σ):       4.9 ms ±   0.5 ms    [User: 3.3 ms, System: 1.5 ms]
+  Range (min … max):     4.0 ms …   6.5 ms    30 runs
+
+
+===========================================================================================
+
+ML-DSA-66 (liboqs)
 
 Keypair:
 Low:  3.8ms
@@ -121,3 +189,5 @@ Benchmark 1: ./verify public_key.bin test.txt test.txt.sig
   Range (min … max):     0.6 ms …   5.8 ms    30 runs
 
 ===========================================================================================
+
+
